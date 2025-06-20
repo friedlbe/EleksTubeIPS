@@ -51,6 +51,9 @@
   #define DS1302_SCLK  (22)
   #define DS1302_IO    (19)
   #define DS1302_CE    (21)
+  
+  //Enable pwm dimming of tft background
+  #define DIM_WITH_ENABLE_PIN_PWM
 #endif
   
 #ifdef HARDWARE_SI_HAI_CLOCK  // fake chinese clock pinout XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

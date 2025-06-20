@@ -1,5 +1,6 @@
 #include "DigitalRainAnimation.h"
 #include "ColorConversion.h"
+#include "GLOBAL_DEFINES.h"
 
 unsigned long DigitalRainAnimation::getMsDelay() {
   return 1000UL / getMatrixSpeed();
@@ -218,6 +219,10 @@ boolean DigitalRainAnimation::loop()
 // draw next frame
 void DigitalRainAnimation::animate(uint8_t brightness) {
   this->brightness = brightness;
+
+  #ifdef DIM_WITH_ENABLE_PIN_PWM
+   this->brightness = 255;
+  #endif
   
   if (isPlaying)
   {

@@ -47,8 +47,30 @@ public:
   void setImageJustification(image_justification_t value) { imageJustification = value; }
   void setBox(uint16_t w, uint16_t h) { boxWidth = w; boxHeight = h; }
   // Controls the power to all displays
-  void enableAllDisplays()           { digitalWrite(TFT_ENABLE_PIN, TFT_ENABLE_VALUE); enabled = true; }
-  void disableAllDisplays()          { digitalWrite(TFT_ENABLE_PIN, TFT_DISABLE_VALUE); enabled = false; }
+  void enableAllDisplays()    
+  {       
+  // Turn "power" on to displays.
+  enabled = true;
+  #ifndef DIM_WITH_ENABLE_PIN_PWM
+   digitalWrite(TFT_ENABLE_PIN, TFT_ENABLE_VALUE);
+  #else
+  // if hardware dimming is used, only activate with the current dimming value
+  ProcessUpdatedDimming();
+  #endif
+  }
+
+  void ProcessUpdatedDimming();
+
+  void disableAllDisplays()          { 
+    enabled = false;
+    #ifndef DIM_WITH_ENABLE_PIN_PWM
+    digitalWrite(TFT_ENABLE_PIN, TFT_DISABLE_VALUE); 
+    #else
+    // if hardware dimming is used, deactivate via the dimming value
+    ProcessUpdatedDimming();
+    #endif
+  }
+
   void toggleAllDisplays()           { if (enabled) disableAllDisplays(); else enableAllDisplays(); }
   bool isEnabled()                   { return enabled; }
   void setDimming(uint8_t dimming);
