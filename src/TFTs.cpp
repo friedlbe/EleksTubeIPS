@@ -350,7 +350,7 @@ void TFTs::drawMeter(int val, bool first, const char *legend) {
   release();
 }
 
-void TFTs::setShowDigits(bool show) {
+void TFTs::setShowDigits(uint8_t show) {
   showDigits = show;
 }
 
@@ -815,10 +815,20 @@ TFT_eSprite& TFTs::drawImage(uint8_t digit) {
 #endif
   chip_select.setDigit(digit);
 
-  if (showDigits) {
+  if (showDigits == 1) {
     strcpy(filename, "/ips/cache/");
-  } else {
+  } 
+  else if (showDigits == 0) 
+  {
     strcpy(filename, "/ips/weather_cache/");
+  }
+  else if (showDigits == 2)  // Static faces
+  {
+    strcpy(filename, "/ips/staticfaces_cache/");
+  }
+  else
+  {
+    Serial.printf("Unknown showDigits value: %d\n", showDigits);
   }
   strcat(filename, icons[digit]);
   strcat(filename, ".bmp");

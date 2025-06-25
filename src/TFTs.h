@@ -31,7 +31,7 @@ public:
 
   void begin(fs::FS& fs);
   void clear();
-  void setShowDigits(bool);
+  void setShowDigits(uint8_t);
 
   void setDigit(uint8_t digit, const char* name, show_t show=yes);
 
@@ -100,7 +100,7 @@ private:
 #endif
   void drawStatus();
 
-  bool showDigits = true;
+  uint8_t showDigits = 1;
   image_justification_t imageJustification = MIDDLE_CENTER;
   uint16_t boxWidth = TFT_WIDTH;
   uint16_t boxHeight = TFT_HEIGHT;

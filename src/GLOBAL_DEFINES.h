@@ -1,3 +1,4 @@
+#pragma once
 /*
  * Author: Aljaz Ogrin
  * Project: Alternative firmware for EleksTube IPS clock

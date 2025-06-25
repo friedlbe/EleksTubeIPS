@@ -240,7 +240,7 @@
 				}
 				delete values["clock_face"];
 			}
-
+			
 			var val = values["weather_icons"];
 			if (typeof val != 'undefined') {
 				if (fileSet == 'weather') {
@@ -248,6 +248,15 @@
 				}
 				delete values["weather_icons"];
 			}
+
+		    var val = values["staticfaces_icons"];
+			if (typeof val != 'undefined') {
+				if (fileSet == 'staticfaces') {
+					setFace(val);
+				}
+				delete values["staticfaces_icons"];
+			}
+
 
 			Object.keys(values).forEach(function (key, index) {
 				var container = $('#' + key + "_container");
@@ -464,8 +473,16 @@
 			var pageId = getPageId($(".ui-page-active").attr("id"));
 
 			var fileSet = $('input[name=file_set]:checked').val();
-			var configName = ':clock_face:';
-			if (fileSet != 'faces') {
+
+			var configName = ':clock_face:'; 
+
+			if(fileSet == 'staticfaces')
+			{
+				configName = ':staticfaces_icons:';
+			} 
+
+			if(fileSet == 'weather')
+			{
 				configName = ':weather_icons:';
 			}
 			var msg = '9:' + pageId + configName + key;
@@ -603,6 +620,7 @@
 					case "sv.init.leds":	// Received initialization object
 					case "sv.init.faces":	// Received initialization object
 					case "sv.init.weather":	// Received initialization object
+					case "sv.init.staticfaces":	// Received initialization object
 					case "sv.init.matrix":	// Received initialization object
 					case "sv.init.mqtt":	// Received initialization object
 					case "sv.init.network":	// Received initialization object

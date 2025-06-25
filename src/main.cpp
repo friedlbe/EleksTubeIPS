@@ -26,6 +26,7 @@
 #include "WSInfoHandler.h"
 #include "OpenWeatherMapWeatherService.h"
 #include "weather.h"
+#include "staticfaces.h"
 #include "ScreenSaver.h"
 #include "mqttBroker.h"
 #include "IRAMPtrArray.h"
@@ -80,6 +81,7 @@ eSPIMenu::Menu *menu;
 Backlights *backlights = NULL;
 IPSClock *ipsClock = NULL;
 Weather *weather = NULL;
+StaticFaces *staticFaces = NULL;
 WeatherService *weatherService = NULL;
 ImageUnpacker *imageUnpacker = NULL;
 
@@ -173,10 +175,12 @@ IRAMPtrArray<BaseConfigItem*> ledSet {
 CompositeConfigItem ledConfig("leds", 0, ledSet);
 
 StringConfigItem fileSet("file_set", 10, "faces");
+
 IRAMPtrArray<BaseConfigItem*> faceSet {
 	// Faces
 	&IPSClock::getClockFace(),
 	&Weather::getIconPack(),
+	&StaticFaces::getIconPack(),
 	&fileSet,
 	0
 };
@@ -288,6 +292,9 @@ void onFileSetChanged(ConfigItem<String> &item) {
 		 + ",\"weather_icons\":\""
 		 + Weather::getIconPack()
 		 + "\""
+		 + ",\"staticfaces_icons\":\""
+		 + StaticFaces::getIconPack()
+		 + "\""
 		 + clockFacesCallback()
 		 + "}}";
 
@@ -396,7 +403,7 @@ void onButtonEvent(const Button *button, Button::Event evt) {
 		// If we only have the power button, it is more useful to cycle through the display modes
 		IntConfigItem &dateOrTime = IPSClock::getTimeOrDate();
 
-		dateOrTime.value = (dateOrTime.value + 1) % 3;
+		dateOrTime.value = (dateOrTime.value + 1) % 4;
 		dateOrTime.put();
 		broadcastUpdate(dateOrTime);
 		dateOrTime.notify();
@@ -432,6 +439,9 @@ void clockTaskFn(void *pArg) {
 	ipsClock->setTimeSync(timeSync);
 	ipsClock->getTimeOrDate().setCallback(onDisplayChanged);
 	ipsClock->getBrightnessConfig().setCallback(onBrightnessChanged);
+
+    staticFaces = new StaticFaces();
+    staticFaces->setImageUnpacker(imageUnpacker);
 
 	screenSaver = new ScreenSaver();
 
@@ -502,8 +512,16 @@ void clockTaskFn(void *pArg) {
 						tfts->disableAllDisplays();
 					}
 					break;
+				case 3:
+					tfts->setShowDigits(2);
+					if (ipsClock->clockOn() || (ipsClock->getDimming() == 1)) {
+						staticFaces->loop(ipsClock->getBrightness());
+					} else {
+						tfts->disableAllDisplays();
+					}
+					break;
 				default:
-					tfts->setShowDigits(true);
+					tfts->setShowDigits(1);
 #ifndef DS1302
 					if (timeSync->initialized() || rtcTimeSync->initialized()) {
 #else
@@ -850,12 +868,23 @@ void configureWebServer() {
 }
 
 
-void setFace(const char *menuLabel) {
+void setFace(const char *menuLabel) 
+{
+
 	if (IPSClock::getTimeOrDate() == 2) {
 		weather->getIconPack().fromString(menuLabel);
 		weather->getIconPack().put();
 		broadcastUpdate(weather->getIconPack());
-	} else {
+	} 
+
+	if (IPSClock::getTimeOrDate() == 3) {
+		staticFaces->getIconPack().fromString(menuLabel);
+		staticFaces->getIconPack().put();
+		broadcastUpdate(staticFaces->getIconPack());
+	}
+		
+	if (IPSClock::getTimeOrDate() == 0 || IPSClock::getTimeOrDate() == 1) 
+    {
 		ipsClock->getClockFace().fromString(menuLabel);
 		ipsClock->getClockFace().put();
 		broadcastUpdate(ipsClock->getClockFace());
@@ -887,7 +916,19 @@ void initFacesMenu() {
 	uint8_t font = TITLE_FONT;
 
 	menu->reset();
-	menu->setTitle(display == 2 ? "Icons" : "Clock Face");
+	if(display == 2)
+	{
+		menu->setTitle("Icons");
+	}
+	else if(display == 3)
+	{
+		menu->setTitle("Static Faces");
+	}
+	else
+	{
+		menu->setTitle("Clock Face");
+	}
+
 	eSPIMenu::Spec& itemSpec = menu->getItemSpec();
 	itemSpec.setFont(TITLE_FONT);
 	itemSpec.setItemColors(MENU_ITEM_BACKGROUND, MENU_TEXT_ITEM, MENU_ITEM_HILIGHT_BACKGROUND, MENU_TEXT_HILIGHT, MENU_ITEM_BACKGROUND, MENU_TEXT_DISABLED);
@@ -905,7 +946,13 @@ void initFacesMenu() {
 	String dirName = "/ips/";
 	if (display == 2) {
 		dirName += "weather";
-	} else {
+	}
+	else if (display == 3) 
+	{
+		dirName += "staticfaces";
+	} 	
+	else 
+	{
 		dirName += "faces";
 	}
 	fs::File dir = LittleFS.open(dirName);

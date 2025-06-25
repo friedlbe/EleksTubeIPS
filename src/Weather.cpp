@@ -23,11 +23,11 @@ void Weather::drawDisplay(int index, int display, bool showDay) {
     char txt[10];
 
     // Load 'space' glyph if any
-    tfts->setShowDigits(true);
+    tfts->setShowDigits(1);
     tfts->setImageJustification(TFTs::MIDDLE_CENTER);
     tfts->setDigit(SECONDS_ONES, "space", TFTs::no);
     TFT_eSprite &sprite = tfts->drawImage(SECONDS_ONES);
-    tfts->setShowDigits(false);
+    tfts->setShowDigits(0);
 
     tfts->setImageJustification(TFTs::TOP_CENTER);
     tfts->setBox(128, 128);
@@ -180,7 +180,7 @@ bool Weather::preDraw(uint8_t dimming) {
         _redraw = false;
 
         tfts->claim();
-    	tfts->setShowDigits(false);
+    	tfts->setShowDigits(0);
         // tfts->invalidateAllDigits();
         tfts->setDimming(dimming);
 
