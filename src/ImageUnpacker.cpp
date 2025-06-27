@@ -75,4 +75,7 @@ void ImageUnpacker::unpackImages(const String &faceName, const String &dest) {
         dir.close();
 #endif
     }
+    else {
+        DEBUG("File %s not found\n", fileName.c_str());
+    }
 }

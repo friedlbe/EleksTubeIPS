@@ -815,7 +815,8 @@ TFT_eSprite& TFTs::drawImage(uint8_t digit) {
 #endif
   chip_select.setDigit(digit);
 
-  if (showDigits == 1) {
+  if (showDigits == 1) 
+  {
     strcpy(filename, "/ips/cache/");
   } 
   else if (showDigits == 0) 

@@ -180,7 +180,7 @@ IRAMPtrArray<BaseConfigItem*> faceSet {
 	// Faces
 	&IPSClock::getClockFace(),
 	&Weather::getIconPack(),
-	&StaticFaces::getIconPack(),
+	&StaticFaces::getStaticFacePack(),
 	&fileSet,
 	0
 };
@@ -293,7 +293,7 @@ void onFileSetChanged(ConfigItem<String> &item) {
 		 + Weather::getIconPack()
 		 + "\""
 		 + ",\"staticfaces_icons\":\""
-		 + StaticFaces::getIconPack()
+		 + StaticFaces::getStaticFacePack()
 		 + "\""
 		 + clockFacesCallback()
 		 + "}}";
@@ -824,6 +824,7 @@ void handleDelete(AsyncWebServerRequest *request) {
 void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
 	if (!index)
 	{
+		DEBUG((String) "Upload to dir: /ips/" + fileSet.value);
 		DEBUG((String) "UploadStart: " + filename);
 		// open the file on first call and store the file handle in the request object
 		request->_tempFile = LittleFS.open("/ips/" + fileSet.value + "/" + filename, "wb", true);
@@ -831,7 +832,7 @@ void handleUpload(AsyncWebServerRequest *request, String filename, size_t index,
 	if (len)
 	{
 		// stream the incoming chunk to the opened file
-		DEBUG((String) "Writing: " + len + " byted");
+		DEBUG((String) "Writing: " + len + " bytes");
 		request->_tempFile.write(data, len);
 	}
 	if (final)
@@ -870,6 +871,7 @@ void configureWebServer() {
 
 void setFace(const char *menuLabel) 
 {
+	DEBUG("Setting face: " + String(menuLabel));
 
 	if (IPSClock::getTimeOrDate() == 2) {
 		weather->getIconPack().fromString(menuLabel);
@@ -878,9 +880,9 @@ void setFace(const char *menuLabel)
 	} 
 
 	if (IPSClock::getTimeOrDate() == 3) {
-		staticFaces->getIconPack().fromString(menuLabel);
-		staticFaces->getIconPack().put();
-		broadcastUpdate(staticFaces->getIconPack());
+		staticFaces->getStaticFacePack().fromString(menuLabel);
+		staticFaces->getStaticFacePack().put();
+		broadcastUpdate(staticFaces->getStaticFacePack());
 	}
 		
 	if (IPSClock::getTimeOrDate() == 0 || IPSClock::getTimeOrDate() == 1) 
@@ -944,6 +946,7 @@ void initFacesMenu() {
 	titleSpec.setBorderColors(TITLE_BORDER_COLOR, TITLE_BORDER_COLOR, TITLE_BORDER_COLOR);
 
 	String dirName = "/ips/";
+
 	if (display == 2) {
 		dirName += "weather";
 	}
@@ -962,9 +965,13 @@ void initFacesMenu() {
     while(name.length() > 0 && optIndex < ESPI_MENU_MAX_ITEMS){
 		String fileName = name.substring(dirName.length() + 1, name.length());
 		String option = fileName.substring(0, fileName.lastIndexOf(postfix));
+
 		eSPIMenu::State state = option == ipsClock->getClockFace() ? eSPIMenu::selected : eSPIMenu::none;
 		if (display == 2) {
 			state = option == weather->getIconPack() ? eSPIMenu::selected : eSPIMenu::none;
+		}
+		if (display == 3) {
+			state = option == staticFaces->getStaticFacePack() ? eSPIMenu::selected : eSPIMenu::none;
 		}
 		menu->addItem(option.c_str(), state);
         name = dir.getNextFileName();
@@ -1002,6 +1009,7 @@ String clockFacesCallback() {
 	String dirName = "/ips/" + fileSet.value;
 	fs::File dir = LittleFS.open(dirName);
     String name = dir.getNextFileName();
+	DEBUG("Clock faces callback in: " + dirName);
     while(name.length() > 0){
 		String fileName = name.substring(dirName.length() + 1, name.length());
 		String option = fileName.substring(0, fileName.lastIndexOf(postfix));

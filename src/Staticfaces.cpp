@@ -22,7 +22,8 @@ char* StaticFaces::digitToName[] = {
 };
 
 StaticFaces::StaticFaces() {
-    oldIcons = getIconPack().value;
+    oldIcons = getStaticFacePack().value;
+    displayTimer.init(millis(), 0);
 }
 
 //const int tzOffset = -18000;
@@ -56,9 +57,9 @@ void StaticFaces::drawDisplay(int index, int display) {
 
 
 void StaticFaces::checkIconPack() {
-    if (getIconPack().value != oldIcons) {
-        oldIcons = getIconPack().value;
-        imageUnpacker->unpackImages("/ips/staticfaces/" + getIconPack().value, "/ips/staticfaces_cache");
+    if (getStaticFacePack().value != oldIcons) {
+        oldIcons = getStaticFacePack().value;
+        imageUnpacker->unpackImages("/ips/staticfaces/" + getStaticFacePack().value, "/ips/staticfaces_cache");
         tfts->claim();
         tfts->invalidateAllDigits();
         tfts->release();
@@ -92,8 +93,8 @@ void StaticFaces::postDraw() {
 void StaticFaces::loop(uint8_t dimming) {
 
     //if (getIconPack().value != oldIcons) {
-    //    oldIcons = getIconPack().value;
-    //    imageUnpacker->unpackImages("/ips/staticfaces/" + getIconPack().value, "/ips/staticfaces_cache");
+    //    oldIcons = getStaticFacePack().value;
+    //    imageUnpacker->unpackImages("/ips/staticfaces/" + getStaticFacePack().value, "/ips/staticfaces_cache");
     //    tfts->claim();
     //    tfts->invalidateAllDigits();
     //    tfts->release();
