@@ -20,7 +20,7 @@ class Weather {
 public:
     Weather(WeatherService *weatherService);
 
-    static StringConfigItem& getIconPack() { static StringConfigItem weather_icons("weather_icons", 25, "monochrome"); return weather_icons; }	// <weather_icons>.tar.gz, max length is 31
+    static StringConfigItem& getIconPack() { static StringConfigItem weather_icons("weather_icons", 31, "monochrome"); return weather_icons; }	// <weather_icons>.tar.gz, max length is 31
     static IntConfigItem& getWeatherHue() { static IntConfigItem weather_hue("weather_hue", 20); return weather_hue; }
     static ByteConfigItem& getWeatherSaturation() { static ByteConfigItem weather_saturation("weather_saturation", 166); return weather_saturation; }
     static ByteConfigItem& getWeatherValue() { static ByteConfigItem weather_value("weather_value", 250); return weather_value; }

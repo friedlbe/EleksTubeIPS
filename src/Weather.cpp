@@ -165,7 +165,7 @@ void Weather::drawSingleDay(uint8_t dimming, int day, int display) {
 void Weather::checkIconPack() {
     if (getIconPack().value != oldIcons) {
         oldIcons = getIconPack().value;
-        imageUnpacker->unpackImages("/ips/weather/" + getIconPack().value, "/ips/weather_cache");
+        imageUnpacker->unpackImages("/ips/weather/" + getIconPack().value, "/ips/w_cache");
         tfts->claim();
         tfts->invalidateAllDigits();
         tfts->release();

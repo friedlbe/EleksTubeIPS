@@ -26,40 +26,16 @@ StaticFaces::StaticFaces() {
     displayTimer.init(millis(), 0);
 }
 
-//const int tzOffset = -18000;
-
 void StaticFaces::drawDisplay(int index, int display) {
-    //char txt[10];
-
-    // Load 'space' glyph if any
-    //tfts->setShowDigits(1);
-    //tfts->setImageJustification(TFTs::MIDDLE_CENTER);
-    //tfts->setDigit(SECONDS_ONES, "space", TFTs::no);
-    //TFT_eSprite &sprite = tfts->drawImage(SECONDS_ONES);
-    //tfts->setShowDigits(1);
-
-    //tfts->setImageJustification(TFTs::TOP_CENTER);
-    //tfts->setBox(128, 128);
-
-    //uint16_t rgb565 = hsv2rgb565(getWeatherHue(), getWeatherSaturation(), getWeatherValue());
-
-    //uint16_t TEMP_COLOR = tfts->dimColor(rgb565);
-    //uint16_t HILO_COLOR = TEMP_COLOR;
-    //uint16_t DAY_FG_COLOR = tfts->dimColor(TFT_GOLD);
-    //uint16_t DAY_BG_COLOR = tfts->dimColor(TFT_RED);
-	//tfts->setMonochromeColor(rgb565);
   
     tfts->setDigit(indexToScreen[display], digitToName[index], TFTs::yes);
-    tfts->drawImage(indexToScreen[display]);
-
-    
+    tfts->drawImage(indexToScreen[display]);    
 }
-
 
 void StaticFaces::checkIconPack() {
     if (getStaticFacePack().value != oldIcons) {
         oldIcons = getStaticFacePack().value;
-        imageUnpacker->unpackImages("/ips/staticfaces/" + getStaticFacePack().value, "/ips/staticfaces_cache");
+        imageUnpacker->unpackImages("/ips/sfaces/" + getStaticFacePack().value, "/ips/sf_cache");
         tfts->claim();
         tfts->invalidateAllDigits();
         tfts->release();
@@ -92,14 +68,6 @@ void StaticFaces::postDraw() {
 
 void StaticFaces::loop(uint8_t dimming) {
 
-    //if (getIconPack().value != oldIcons) {
-    //    oldIcons = getStaticFacePack().value;
-    //    imageUnpacker->unpackImages("/ips/staticfaces/" + getStaticFacePack().value, "/ips/staticfaces_cache");
-    //    tfts->claim();
-    //    tfts->invalidateAllDigits();
-    //    tfts->release();
-    //    _redraw = true;
-    //}
     checkIconPack();
     
     tfts->setImageJustification(TFTs::MIDDLE_CENTER);

@@ -174,7 +174,7 @@ IRAMPtrArray<BaseConfigItem*> ledSet {
 };
 CompositeConfigItem ledConfig("leds", 0, ledSet);
 
-StringConfigItem fileSet("file_set", 10, "faces");
+StringConfigItem fileSet("file_set", 31, "faces");
 
 IRAMPtrArray<BaseConfigItem*> faceSet {
 	// Faces
@@ -824,8 +824,12 @@ void handleDelete(AsyncWebServerRequest *request) {
 void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
 	if (!index)
 	{
-		DEBUG((String) "Upload to dir: /ips/" + fileSet.value);
-		DEBUG((String) "UploadStart: " + filename);
+		//DEBUG((String) "Upload to dir: /ips/" + fileSet.value);
+		Serial.printf("Upload to dir: /ips/%s\n", fileSet.value.c_str());
+		//DEBUG((String) "UploadStart: " + filename);
+		Serial.printf("UploadStart: %s\n", filename.c_str());
+
+
 		// open the file on first call and store the file handle in the request object
 		request->_tempFile = LittleFS.open("/ips/" + fileSet.value + "/" + filename, "wb", true);
 	}
@@ -952,7 +956,7 @@ void initFacesMenu() {
 	}
 	else if (display == 3) 
 	{
-		dirName += "staticfaces";
+		dirName += "sfaces";
 	} 	
 	else 
 	{

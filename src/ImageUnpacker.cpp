@@ -33,6 +33,7 @@ void ImageUnpacker::unpackProgressCallback(uint8_t progress) {
 
 void ImageUnpacker::unpackImages(const String &faceName, const String &dest) {
 	String fileName(faceName + ".tar.gz");
+    DEBUG("Unpacking %s to %s\n", fileName.c_str(), dest.c_str());
 
     if (LittleFS.exists(fileName)) {
         newUnpack = true;

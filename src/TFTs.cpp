@@ -821,15 +821,15 @@ TFT_eSprite& TFTs::drawImage(uint8_t digit) {
   } 
   else if (showDigits == 0) 
   {
-    strcpy(filename, "/ips/weather_cache/");
+    strcpy(filename, "/ips/w_cache/");
   }
   else if (showDigits == 2)  // Static faces
   {
-    strcpy(filename, "/ips/staticfaces_cache/");
+    strcpy(filename, "/ips/sf_cache/");
   }
   else
   {
-    Serial.printf("Unknown showDigits value: %d\n", showDigits);
+    DEBUG("Unknown showDigits value: %d\n", showDigits);
   }
   strcat(filename, icons[digit]);
   strcat(filename, ".bmp");
@@ -837,6 +837,7 @@ TFT_eSprite& TFTs::drawImage(uint8_t digit) {
   // check if file is already loaded into buffer; skip loading if it is. Saves 50 to 150 msec of time.
   // if (strcmp(loadedFilename, filename) != 0 || !showDigits) {
     LoadImageIntoBuffer(filename);
+    DEBUG("Loading file %s\n", filename);
   // }
 #ifdef USE_DMA
   else {
