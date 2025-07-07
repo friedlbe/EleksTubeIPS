@@ -465,7 +465,7 @@ void clockTaskFn(void *pArg) {
 	mqttBroker->init(ssid);
 
 	while (true) {
-		delay(1);
+		delay(5);
 
 #ifdef BUTTON_MENU_PINS
 		leftButton->getEvent();
@@ -493,8 +493,11 @@ void clockTaskFn(void *pArg) {
 					tfts->disableAllDisplays();
 					break;
 				default:
+				    backlights->sethueOverride(true);
+					backlights->setLedHue(DigitalRainAnimation::getMatrixHue().value);
 					tfts->enableAllDisplays();
 					tfts->animateRain();
+					tfts->setDimming(20);
 					tfts->invalidateAllDigits();
 					break;
 			}
@@ -502,7 +505,7 @@ void clockTaskFn(void *pArg) {
 			// Memory is an issue if one of the below decides to unpack a .gz.tar file
 			// and the weather task decides to retrieve the forecast at the same time
 			xSemaphoreTake(memMutex, portMAX_DELAY);
-
+			backlights->sethueOverride(false);
 			ipsClock->setBrightness(ipsClock->getBrightnessConfig());
 			switch (IPSClock::getTimeOrDate().value) {
 				case 2:
@@ -534,15 +537,14 @@ void clockTaskFn(void *pArg) {
 					}
 					break;
 			}
-
 			xSemaphoreGive(memMutex);
 		}
-
 		mqttBroker->checkConnection();
 	}
 }
 
 #define DEFAULT_WEATHER_SLEEP (pdMS_TO_TICKS(15 * 60 * 1000))
+
 void weatherTaskFn(void *pArg) {
 	TickType_t toSleep = DEFAULT_WEATHER_SLEEP;
 	while (true) {
@@ -569,11 +571,13 @@ void weatherTaskFn(void *pArg) {
 
 		toSleep = DEFAULT_WEATHER_SLEEP;
 		if ((WiFi.status() == WL_CONNECTED) && !wifiManager->isAP()) {
+
 			// Memory is an issue if the clock task decides to unpack a .gz.tar file
 			// and this task tries to retrieve the forecast at the same time
 			xSemaphoreTake(memMutex, portMAX_DELAY);
 			bool gotWeather = weatherService->getWeatherInfo();
 			xSemaphoreGive(memMutex);
+
 			if (!gotWeather) {
 				DEBUG("Failed to get weather");
 				toSleep = pdMS_TO_TICKS(180000);	// Try again in 3 minutes
@@ -635,7 +639,6 @@ IRAMPtrArray<WSHandler*> wsHandlers {
 	&wsMatrixHandler,
 	NULL
 };
-
 
 void infoCallback() {
 	wsInfoHandler.setSsid(ssid);
@@ -817,7 +820,6 @@ void handleDelete(AsyncWebServerRequest *request) {
 			return;
 		}
 	}
-
 	request->send(500, "text/plain", "Delete dailed");
 }
 
@@ -871,7 +873,6 @@ void configureWebServer() {
 	server->begin();
 	ws->enable(true);
 }
-
 
 void setFace(const char *menuLabel) 
 {
@@ -1050,7 +1051,7 @@ void ledTaskFn(void *pArg) {
 			backlights->setBrightness(ipsClock->getBrightness());
 			backlights->loop();
 		}
-		delay(16);
+		delay(10);
 	}
 }
 
@@ -1302,5 +1303,5 @@ IPSClock::getTimeZone().setCallback(onTimezoneChanged);
 }
 
 void loop() {
-	
+	delay(1000);	// This task is never called, so we just delay here
 }

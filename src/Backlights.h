@@ -42,11 +42,15 @@ public:
   void PowerOn()  { off = false; }
   void PowerOff()  { off = true; }
   void setOn(bool on) { off = !on; }
+  void sethueOverride(bool override) { hueoverride = override; }
   void setBrightness(byte brightness) { this->brightness = brightness; }
+  void setLedHue(uint8_t hue){this->hue = hue;}
 
 private:
   bool off;
+  bool hueoverride = false; 
   byte brightness = 255;
+  byte hue = 85; // Default hue value, can be changed by user
   
   NeoPixelBus <NeoGrbFeature, Neo800KbpsMethod> pixels;
   NeoGamma<NeoGammaTableMethod> colorGamma;
@@ -61,7 +65,7 @@ private:
   void clear();
   void setPixelColor(uint8_t digit, uint8_t hue, uint8_t val, uint8_t sat);
 
-  const uint32_t test_ms_delay = 250; 
+  //const uint32_t test_ms_delay = 250; 
 
 };
 

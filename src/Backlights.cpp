@@ -18,8 +18,15 @@ void Backlights::loop() {
     uint16_t val = getLEDValue();
 
     val = val * brightness / 255;
-    
-    fill(getLEDHue(), getLEDSaturation(), val);
+    //If screen saver is on, use a different hue
+    if(hueoverride) 
+    {
+      fill(hue, getLEDSaturation(), val);
+    }
+    else
+    {
+      fill(getLEDHue(), getLEDSaturation(), val);
+    }
     show();
   }
   else if (current_pattern == rainbow) {
