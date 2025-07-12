@@ -30,6 +30,10 @@ public:
 		this->brightness = brightness;
 	}
 
+	void setDimBrightness(const String& dimbrightness) {
+		this->dimbrightness = dimbrightness;
+	}
+
 	void setClockOn(const String& clockOn) {
 		this->clockOn = clockOn;
 	}
@@ -70,6 +74,7 @@ private:
     String fsSize;
     String fsFree;
 	String brightness;
+	String dimbrightness;
 	String clockOn;
 	String triggered;
 	String lastUpdateTime;

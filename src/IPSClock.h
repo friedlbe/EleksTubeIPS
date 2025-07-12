@@ -22,6 +22,7 @@ public:
     static StringConfigItem& getTimeZone() { static StringConfigItem time_zone("time_zone", 63, "CET-1CEST,M3.5.0,M10.5.0/3"); return time_zone; }	// POSIX timezone format
     static IntConfigItem& getDimming() { static IntConfigItem dimming("dimming", 2); return dimming; }
     static ByteConfigItem& getBrightnessConfig() { static ByteConfigItem brightness_config("brightness_config", 255); return brightness_config; }
+    static ByteConfigItem& getDimBrightnessConfig() { static ByteConfigItem dimbrightness_config("dimbrightness_config", 15); return dimbrightness_config; }
 
     void init();
     void loop();
@@ -32,11 +33,13 @@ public:
     void setOnOverride() { onOverride = millis(); };
     void overrideUntilNextChange() { prevScheduleOn = clockOn(); temporaryOverride = true; }
     void setBrightness(byte brightness) { this->brightness = brightness; }
-    uint8_t getBrightness() { return getDimming() == 1 && brightness == 255 && !clockOn() ? 40 : brightness; }
+    void setDimBrightness(byte dimbrightness) { this->dimbrightness = dimbrightness; }
+    uint8_t getBrightness() { return getDimming() == 1 && !clockOn() ? dimbrightness : brightness; }
 private:
     static char* digitToName[10];
 
     byte brightness = 255;
+    byte dimbrightness = 15;
     ClockTimer::Timer displayTimer;
     String oldClockFace;
 	TimeSync *pTimeSync = 0;

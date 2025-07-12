@@ -158,6 +158,7 @@ IRAMPtrArray<BaseConfigItem*> clockSet {
 	&IPSClock::getClockFace(),
 	&IPSClock::getDimming(),
 	&IPSClock::getBrightnessConfig(),
+	&IPSClock::getDimBrightnessConfig(),
 	&IPSClock::getTimeZone(),
 	0
 };
@@ -314,6 +315,10 @@ void onBrightnessChanged(ConfigItem<byte> &item) {
 	weather->redraw();
 }
 
+void onDimBrightnessChanged(ConfigItem<byte> &item) {
+	weather->redraw();
+}
+
 template <class T>
 void onWeatherColorChanged(ConfigItem<T> &item) {
 	weather->redraw();
@@ -440,6 +445,7 @@ void clockTaskFn(void *pArg) {
 	ipsClock->setTimeSync(timeSync);
 	ipsClock->getTimeOrDate().setCallback(onDisplayChanged);
 	ipsClock->getBrightnessConfig().setCallback(onBrightnessChanged);
+	ipsClock->getDimBrightnessConfig().setCallback(onDimBrightnessChanged);
 
     staticFaces = new StaticFaces();
     staticFaces->setImageUnpacker(imageUnpacker);
@@ -505,7 +511,7 @@ void clockTaskFn(void *pArg) {
 				    }
 					tfts->enableAllDisplays();
 					tfts->animateRain();
-					tfts->setDimming(20);
+					tfts->setDimming(ipsClock->getDimBrightnessConfig().value);
 					tfts->invalidateAllDigits();
 					break;
 				}
@@ -515,7 +521,9 @@ void clockTaskFn(void *pArg) {
 			// and the weather task decides to retrieve the forecast at the same time
 			xSemaphoreTake(memMutex, portMAX_DELAY);
 			backlights->sethueOverride(false);
+			
 			ipsClock->setBrightness(ipsClock->getBrightnessConfig());
+			ipsClock->setDimBrightness(ipsClock->getDimBrightnessConfig());
 			switch (IPSClock::getTimeOrDate().value) {
 				case 2:
 					if (ipsClock->clockOn() || (ipsClock->getDimming() == 1)) {

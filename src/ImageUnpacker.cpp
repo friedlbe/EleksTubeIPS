@@ -49,9 +49,9 @@ void ImageUnpacker::unpackImages(const String &faceName, const String &dest) {
         TarGzUnpacker &unpacker = getUnpacker();
 
         if( !unpacker.tarGzExpander(tarGzFS, fileName.c_str(), tarGzFS, dest.c_str(), nullptr ) ) {
-            Serial.printf("tarGzExpander+intermediate file failed with return code #%d\n", unpacker.tarGzGetError() );
+            DEBUG("tarGzExpander+intermediate file failed with return code #%d\n", unpacker.tarGzGetError() );
         } else {
-            Serial.println("File unzipped");
+            DEBUG("File unzipped");
         }
 
 #ifdef notdef
