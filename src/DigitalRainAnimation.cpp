@@ -16,7 +16,13 @@ void DigitalRainAnimation::prepareAnim()
   width = _gfx->width();
   height = _gfx->height();
   _gfx->fillRect(0, 0, width, height, 0);
+
+  #ifdef DIM_WITH_ENABLE_PIN_PWM
+  _gfx->setTextColor(hsv2rgb565(getMatrixHue(), getMatrixSaturation(), 255), 0);
+  #else
   _gfx->setTextColor(hsv2rgb565(getMatrixHue(), getMatrixSaturation(), getMatrixValue() * brightness / 255L), 0);
+  #endif
+
   numOfline = (width + lineWidth - 1) / lineWidth;
   numOfRows = (_gfx->height() + letterHeight - 1) / letterHeight + 2; // 2 greater than fits on the display
 
@@ -66,8 +72,14 @@ void DigitalRainAnimation::mutateCharAt(int lineNum, int row)
 void DigitalRainAnimation::lineAnimation2(int startX, int lineNum, int dropIndex)
 {
   uint8_t hue = getMatrixHue();
-  uint8_t val = getMatrixValue() * brightness / 255L;
+  uint8_t val; 
   uint8_t sat = getMatrixSaturation();
+
+  #ifdef DIM_WITH_ENABLE_PIN_PWM
+  val = 255; // full color brightness, brightness is controlled by the enable pin PWM
+  #else
+  val = getMatrixValue() * brightness / 255L;
+  #endif
 
   bool isKeyMode = keyString.length() > 0;
   for (int row = line_pos[dropIndex] - line_length[dropIndex]; row <= line_pos[dropIndex]; row++)

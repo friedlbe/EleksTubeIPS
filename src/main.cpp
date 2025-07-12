@@ -59,7 +59,7 @@ IRAMPtrArray<char*> manifest {
 	"Unknown clock hardware",
 #endif
 	// Firmware version
-	"1.6.7",
+	"1.7.0",
 	// Hardware chip/variant
 	"ESP32",
 	// Device name
@@ -507,11 +507,12 @@ void clockTaskFn(void *pArg) {
                     }
 				    else
 				    {
-					    backlights->sethueOverride(false);
+						backlights->sethueOverride(false);
 				    }
 					tfts->enableAllDisplays();
 					tfts->animateRain();
-					tfts->setDimming(ipsClock->getDimBrightnessConfig().value);
+					tfts->setDimming(DigitalRainAnimation::getMatrixValue().value);
+					//tfts->setDimming(ipsClock->getDimBrightnessConfig().value);
 					tfts->invalidateAllDigits();
 					break;
 				}

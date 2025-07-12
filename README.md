@@ -12,16 +12,19 @@ This firmware uses the WiFi support that your clock already has to sync the time
   * Set the hours the clock is on
   * Switch between a six digit clock showing seconds and a four digit AM/PM display
   * Enable/disable leading zeros
-  * Switch the display between time, date and the weather
+  * Switch the display between time, date, static faces and the weather
   * Set the date format
   * Set the backlight effects and colors
+  * Add the possibility to select brightness and the dim-brightness seperately.
   * Upload, delete and select the images used for the clock display
   * Configure the weather forecast
   * Upload, delete and select the icons used for the weather display
+  * Upload, delete and select the icons used for the static display (digital photo frame).
 * Clock faces and weather icons can be selected using the buttons.
 * You can switch between time, date and weather using the buttons.
-* It has a screen saver.
+* It has a screen saver, add the possibility to sync LED Backlight hue with digital rain screen saver.
 * There is also a tool to convert images in to a format that can be displayed on the clock
+* Added a python script with GUi to convert images into a format that can be displayed on the clock
 * It can connect to a MQTT broker, primarily to allow use of movement and luminance sensors. The full state of the clock is published too.
 * There are specific variants for:
   * The [EleksTube v1 clock](https://www.nixies.us/projects/elekstubeips-clock/elekstube-ips-v1/)
@@ -55,5 +58,6 @@ See [the wiki](https://github.com/judge2005/EleksTubeIPS/wiki "wiki") for detail
 # Credits
 
 [Original documentation and software from EleksMaker.](https://wiki.eleksmaker.com/doku.php?id=ips)
+[Well polished by judge2005](https://github.com/judge2005/EleksTubeIPS/)
 
 This code wouldn't exist without the work done by the people on [this reddit discussion](https://www.reddit.com/r/arduino/comments/mq5td9/hacking_the_elekstube_ips_clock_anyone_tried_it/).
