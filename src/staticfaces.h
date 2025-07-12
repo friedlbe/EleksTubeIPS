@@ -12,7 +12,6 @@
 #include <ESPAsyncHTTPClient.h>
 #endif
 #include <ConfigItem.h>
-//#include <TimeSync.h>
 
 #include "ClockTimer.h"
 
@@ -22,7 +21,7 @@ class StaticFaces {
 public:
     StaticFaces();
 
-    static StringConfigItem& getStaticFacePack() { static StringConfigItem staticfaces_icons("staticfaces_icons", 31, "dom2"); return staticfaces_icons; }	// <staticfaces_icons>.tar.gz, max length is 31
+    static StringConfigItem& getStaticFacePack() { static StringConfigItem staticfaces_icons("staticfaces_icons", 31, "manga2"); return staticfaces_icons; }	// <staticfaces_icons>.tar.gz, max length is 31
 
     void setImageUnpacker(ImageUnpacker *imageUnpacker) { this->imageUnpacker = imageUnpacker; }
 

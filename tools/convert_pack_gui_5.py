@@ -22,7 +22,7 @@ MODES = {
     "Staticface": ["1", "2", "3", "4", "5", "6"]
 }
 
-DESCRIPTIONS = {
+DESCRIPTIONS_German = {
     "Weatherface": {
         "01d": "Klarer Himmel - Tag",
         "01n": "Klarer Himmel - Nacht",
@@ -45,7 +45,7 @@ DESCRIPTIONS = {
     }
 }
 
-DESCRIPTIONS_English = {
+DESCRIPTIONS = {
     "Weatherface": {
         "01d": "Clear sky - Day",
         "01n": "Clear sky - Night",
