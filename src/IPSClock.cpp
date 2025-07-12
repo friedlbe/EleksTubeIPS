@@ -150,10 +150,13 @@ void IPSClock::loop() {
                 tfts->setDigit(MINUTES_TENS, digitToName[month / 10], TFTs::yes);
                 tfts->setDigit(HOURS_ONES, digitToName[day % 10], TFTs::yes);
                 tfts->setDigit(HOURS_TENS, digitToName[day / 10], TFTs::yes);
-            } else {
-                Serial.println("Bad display state for clock");
+            } else 
+            {
+                DEBUG("Bad display state for clock");
             }
-        } else {
+        } 
+        else 
+        {
             tfts->disableAllDisplays();
         }
 
