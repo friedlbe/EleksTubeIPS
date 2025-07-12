@@ -18,7 +18,7 @@ void Backlights::loop() {
     uint16_t val = getLEDValue();
 
     val = val * brightness / 255;
-    //If screen saver is on, use a different hue
+    //If screen saver is on, use a different hue when hueoverride is set.
     if(hueoverride) 
     {
       fill(hue, getLEDSaturation(), val);
@@ -46,7 +46,14 @@ void Backlights::pulsePattern() {
   uint16_t val = valAdjust * getLEDValue().value / 256;
   val = val * brightness / 255;
 
-  fill(getLEDHue(), getLEDSaturation(), val);
+    if(hueoverride) 
+    {
+      fill(hue, getLEDSaturation(), val);
+    }
+    else
+    {
+      fill(getLEDHue(), getLEDSaturation(), val);
+    }
 
   show();
 }
@@ -59,8 +66,15 @@ void Backlights::breathPattern() {
   val = val * getLEDValue().value / 256;
   val = val * brightness / 255;
 
-  fill(getLEDHue(), getLEDSaturation(), val);
 
+    if(hueoverride) 
+    {
+      fill(hue, getLEDSaturation(), val);
+    }
+    else
+    {
+      fill(getLEDHue(), getLEDSaturation(), val);
+    }
   show();
 }
 

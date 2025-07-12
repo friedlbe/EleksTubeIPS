@@ -33,6 +33,15 @@
 									data-on-text="Yes" data-off-text="No"
 									data-wrapper-class="custom-label-flipswitch">
 							</div>
+							<div class="dispInlineLabel">
+								<label for="matrix_backled_sync">BackLED Hue Sync</label>
+							</div>
+							<div class="dispInline">
+								<input onchange="setVisibility('mct_container', this, [true]);elementChange(this)" type="checkbox"
+									data-role="flipswitch" name="matrix_backled_sync" id="matrix_backled_sync"
+									data-on-text="Yes" data-off-text="No"
+									data-wrapper-class="custom-label-flipswitch">
+							</div>							
 							<div id="mct_container" style="display: block;">
 								<div class="clearFloats"></div>
 								<label for="matrix_hue_cycle_time">Cycle Time(s)</label>

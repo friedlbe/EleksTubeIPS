@@ -206,6 +206,7 @@ IRAMPtrArray<BaseConfigItem*> matrixSet {
 	&DigitalRainAnimation::getMatrixSaturation(),
 	&DigitalRainAnimation::getMatrixValue(),
 	&DigitalRainAnimation::getMatrixHueCycling(),
+	&DigitalRainAnimation::getBackLedHueSync(),
 	&DigitalRainAnimation::getMatrixHueCycleTime(),
 	&ScreenSaver::getScreenSaver(),
 	&ScreenSaver::getScreenSaverDelay(),
@@ -493,14 +494,22 @@ void clockTaskFn(void *pArg) {
 					tfts->disableAllDisplays();
 					break;
 				default:
-				    backlights->sethueOverride(true);
-					backlights->setLedHue(DigitalRainAnimation::getMatrixHue().value);
+					if(DigitalRainAnimation::getBackLedHueSync().value == true) 
+					{
+				       backlights->sethueOverride(true);
+					   backlights->setLedHue(DigitalRainAnimation::getMatrixHue().value);
+                    }
+				    else
+				    {
+					    backlights->sethueOverride(false);
+				    }
 					tfts->enableAllDisplays();
 					tfts->animateRain();
 					tfts->setDimming(20);
 					tfts->invalidateAllDigits();
 					break;
-			}
+				}
+			
 		} else {
 			// Memory is an issue if one of the below decides to unpack a .gz.tar file
 			// and the weather task decides to retrieve the forecast at the same time
@@ -826,10 +835,10 @@ void handleDelete(AsyncWebServerRequest *request) {
 void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
 	if (!index)
 	{
-		//DEBUG((String) "Upload to dir: /ips/" + fileSet.value);
-		Serial.printf("Upload to dir: /ips/%s\n", fileSet.value.c_str());
-		//DEBUG((String) "UploadStart: " + filename);
-		Serial.printf("UploadStart: %s\n", filename.c_str());
+		DEBUG((String) "Upload to dir: /ips/" + fileSet.value);
+		//Serial.printf("Upload to dir: /ips/%s\n", fileSet.value.c_str());
+		DEBUG((String) "UploadStart: " + filename);
+		//Serial.printf("UploadStart: %s\n", filename.c_str());
 
 
 		// open the file on first call and store the file handle in the request object

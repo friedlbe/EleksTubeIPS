@@ -27,10 +27,7 @@ static uint32_t sketchSize(sketchSize_t response) {
     
 void WSInfoHandler::handle(AsyncWebSocketClient *client, char *data) {
 	cbFunc();
-
-	// static Uptime uptime;
-	const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(30);
-	DynamicJsonDocument doc(bufferSize);
+	JsonDocument doc;
 	JsonObject root = doc.to<JsonObject>();
 
 	root["type"] = "sv.init.clock";

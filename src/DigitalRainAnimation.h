@@ -16,6 +16,7 @@ public:
   static ByteConfigItem& getMatrixSpeed() { static ByteConfigItem matrix_speed("matrix_speed", 16); return matrix_speed; }
   static IntConfigItem& getMatrixHueCycleTime() { static IntConfigItem matrix_hue_cycle_time("matrix_hue_cycle_time", 139); return matrix_hue_cycle_time; }
   static BooleanConfigItem& getMatrixHueCycling() { static BooleanConfigItem matrix_hue_cycling("matrix_hue_cycling", false); return matrix_hue_cycling; }
+  static BooleanConfigItem& getBackLedHueSync() { static BooleanConfigItem matrix_backled_sync("matrix_backled_sync", false); return matrix_backled_sync; }
   static IntConfigItem& getMatrixHue() { static IntConfigItem matrix_hue("matrix_hue", 85); return matrix_hue; }
   static ByteConfigItem& getMatrixSaturation() { static ByteConfigItem matrix_saturation("matrix_saturation", 255); return matrix_saturation; }
   static ByteConfigItem& getMatrixValue() { static ByteConfigItem matrix_value("matrix_value", 255); return matrix_value; }
