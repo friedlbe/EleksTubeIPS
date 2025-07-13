@@ -494,7 +494,7 @@ void clockTaskFn(void *pArg) {
 			tfts->invalidateAllDigits();
 		}
 		
-		if (ipsClock->clockOn() && screenSaver->isOn()) {
+		else if (ipsClock->clockOn() && screenSaver->isOn()) {
 			switch(ScreenSaver::getScreenSaver()) {
 				case 0:
 					tfts->disableAllDisplays();
@@ -512,7 +512,6 @@ void clockTaskFn(void *pArg) {
 					tfts->enableAllDisplays();
 					tfts->animateRain();
 					tfts->setDimming(DigitalRainAnimation::getMatrixValue().value);
-					//tfts->setDimming(ipsClock->getDimBrightnessConfig().value);
 					tfts->invalidateAllDigits();
 					break;
 				}
